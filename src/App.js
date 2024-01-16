@@ -1,25 +1,32 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
-import HomePage from "./components/homePage";
-import VisitorRegistrationFrom from "./components/visitorRegistrationFrom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/header";
-import ThanksPage from "./components/thanksPage";
-import VerifyDetails from "./components/verifyDetails";
-import ThanksVerify from "./components/thanksVerify";
+import GlobalStyles from 'styles/GlobalStyles';
+import { css } from "styled-components"; //eslint-disable-line
+import TwoColumnWithVideo from "components/hero/TwoColumnWithVideo";
+import Footer from "components/footers/FiveColumnDark"
+import AnimationRevealPage from "helpers/AnimationRevealPage";
+import Member from 'components/forms/Member'
+import Visistor from "components/forms/Visistor";
+import HomePage from "pages/HomePage";
+import ThanksPage from "pages/ThanksPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 function App() {
   return (
-    <div className="flex flex-col items-center h-screen">
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/visitor" element={<VisitorRegistrationFrom />} />
-          <Route path="/member" element={<VerifyDetails />} />
-          <Route path="/thanks" element={<ThanksPage/>}/>
-          <Route path="/verify" element={<ThanksVerify/>}/>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <>
+      <GlobalStyles />
+      <AnimationRevealPage>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/member"  element={<Member/>}/>
+            <Route path= '/visitor' element={<Visistor/>}/>
+            <Route  path="/thanks" element={<ThanksPage/>}/>
+          </Routes>
+          <Footer />
+        </Router>
+      </AnimationRevealPage>
+    </>
   );
 }
 
