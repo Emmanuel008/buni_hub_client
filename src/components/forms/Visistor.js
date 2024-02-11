@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-anonymous-default-export */
-import React from "react";
+import React, {useState} from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { css } from "styled-components/macro"; //eslint-disable-line
@@ -9,6 +9,10 @@ import {
   Subheading as SubheadingBase,
 } from "components/misc/Headings.js";
 import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2";
+
 
 const Container = tw.div`relative`;
 const TwoColumn = tw.div`flex flex-col md:flex-row justify-between max-w-screen-xl mx-auto py-20 md:py-24`;
@@ -48,7 +52,43 @@ export default ({
   textOnLeft = true,
 }) => {
   // The textOnLeft boolean prop can be used to display either the text on left or right side of the image.
+  const navigate = useNavigate()
+  const [values, setValues] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    role: "",
+    phone_number: ""
+  });
 
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const { first_name,last_name,email, role, phone_number } = values;
+      await axios
+        .post(`http://localhost:8081/api/visitor/createVisitor`, {
+          first_name,
+          last_name,
+          email,
+          role,
+          phone_number,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            navigate("/thanks");
+          }
+        });
+    } catch (error) {
+      Error.fire({
+        icon: "error",
+        title: error.message,
+      });
+    }
+  };
   return (
     <Container>
       <TwoColumn>
@@ -60,13 +100,38 @@ export default ({
             {subheading && <Subheading>{subheading}</Subheading>}
             {/* <Heading>{heading}</Heading> */}
             {description && <Description>{description}</Description>}
-            <Form action={formAction} method={formMethod}>
-              <Input type="text" name="firstName" placeholder="First Name" />
-              <Input type="text" name="LastName" placeholder="Last Name" />
-              <Input type="email" name="email" placeholder="Your Email" />
-              <Input type="text" name="Role" placeholder="Your Role" />
-              <Input type="text" name="Phone Number" placeholder="0756989812" />
-              <SubmitButton type="submit">{submitButtonText}</SubmitButton>
+            <Form onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                name="first_name"
+                placeholder="First Name"
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                name="last_name"
+                placeholder="Last Name"
+                onChange={handleChange}
+              />
+              <Input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                name="role"
+                placeholder="Your Role"
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                name="phone_number"
+                placeholder="0756989812"
+                onChange={handleChange}
+              />
+              <SubmitButton>{submitButtonText}</SubmitButton>
             </Form>
           </TextContent>
         </TextColumn>
@@ -74,3 +139,15 @@ export default ({
     </Container>
   );
 };
+
+const Error = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  // timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});

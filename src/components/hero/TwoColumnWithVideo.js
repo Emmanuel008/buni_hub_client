@@ -95,9 +95,9 @@ export default ({
             <IllustrationContainer>
               <img
                 css={imageCss}
-                src="/images/buni.png"
+                src="/images/buni.jpg"
                 alt="Hero"
-                style={{ width: "100vw" }}
+                style={{ width: "60vw", height: "80vh" }}
               />
               {imageDecoratorBlob && <DecoratorBlob2 />}
             </IllustrationContainer>
