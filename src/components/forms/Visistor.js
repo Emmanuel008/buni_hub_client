@@ -12,6 +12,7 @@ import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2";
+import { urlDev } from "utils/API";
 
 
 const Container = tw.div`relative`;
@@ -70,7 +71,7 @@ export default ({
     try {
       const { first_name,last_name,email, role, phone_number } = values;
       await axios
-        .post(`http://localhost:8081/api/visitor/createVisitor`, {
+        .post(`${urlDev}/api/visitor/createVisitor`, {
           first_name,
           last_name,
           email,

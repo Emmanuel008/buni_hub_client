@@ -8,6 +8,8 @@ import { SectionHeading, Subheading as SubheadingBase } from "components/misc/He
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2";
+import {urlDev} from "../../utils/API"
+
 
 
 const PrimaryButton = tw.button`font-bold px-8 lg:px-10 py-3 rounded bg-primary-500 text-gray-100 hocus:bg-primary-700 focus:shadow-outline focus:outline-none transition duration-300`;
@@ -60,7 +62,7 @@ export default ({
       const {membership_id, password} = values
       console.log(values)
       await axios
-        .post(`http://localhost:8081/api/member/verifyMember`, {
+        .post(`${urlDev}/api/member/verifyMember`, {
           membership_id,
           password,
         })
